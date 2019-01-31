@@ -43,7 +43,7 @@ var login = (function(){
         }
     });
 
-    $("#login_btn").click(function(){
+    /*$("#login_btn").click(function(){
         if (loginform.valid() === true)
         {
             $.ajax({
@@ -60,7 +60,7 @@ var login = (function(){
             $(loginform)[0].reset();
             return false;
         }
-    });
+    });*/
     return{
 
     }

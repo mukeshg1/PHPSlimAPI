@@ -1,57 +1,96 @@
 <?php
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
-$app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
-
-//Login Users
-$app->post('/login', function(Request $request, Response $respose){
     session_start();
-    $loginemail = false;
-    $loginpassword = false;
+
+    $dbconn = mysqli_connect('127.0.0.1', 'root', '', 'registration') or
+    exit("Database Error! Try after sometime.");
+
     if(isset($_POST['loginemail']))
     {
-        $loginemail = $_POST['loginemail'];
+        $loginemail = mysqli_real_escape_string($dbconn, $_POST['loginemail']);
     }
     if(isset($_POST['loginpassword']))
     {
-        $loginpassword = $_POST['loginpassword'];
+        $loginpassword = mysqli_real_escape_string($dbconn, $_POST['loginpassword']);
     }
-    if (empty($loginpassword))
+   
+
+    $sql = "select * from user where email = '$loginemail' ";
+    if(!$dbconn)
     {
-        exit ("PAssword not set.");
+        echo "Error connecting to database..";
     }
-    $sql = "select * from user where email = :loginemail ";
-
-    try
+    $result = mysqli_query($dbconn,$sql);
+    $rows = mysqli_fetch_array($result);
+    if($rows)
     {
-        $db = new db(); 
-        $db = $db->connect();
-        $stmt = $db->prepare($sql);
-        $arr = array(':loginemail'=>$loginemail);
-        $stmt->execute($arr);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
-        
-        $result = $stmt->fetch();
-        if ($result)
+        $pass = $rows['password1'];
+        if (password_verify($loginpassword, $pass ))
         {
-            $pass = $result['password1'];
-            if ($loginpassword === $pass)
-            {
-                echo "<br>Login working.";
-            }
-            else
-            {
-                echo '{"notice": "Invalid Email or Password"}';
-            }          
+            $_SESSION['user'] = $loginemail;
+            /*echo "login successfull..<br>";
+            echo "Welcome, " . $rows["email"]. "<br>Name: " . $rows["firstname"]. " " . $rows["lastname"]. "<br>";*/
+
+            ?>
+            <html>
+            <head>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> 
+            </head>
+            <body>
+                <div class="card-header">
+                    Welcome, <?php echo $loginemail ?>!
+                    <button><a href='logout.php'>Logout</php></a></button>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">Name</div>
+                                <div class="col-md-6"><?php echo $rows["firstname"]. " " . $rows["lastname"]?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Gender</div>
+                                <div class="col-md-6"><?php echo $rows["gender"]?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Birth date</div>
+                                <div class="col-md-6"><?php echo $rows["birthdate"]?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Mobile Number</div>
+                                <div class="col-md-6"><?php echo $rows["phone"]?></div>
+                            </div>     
+                            <div class="row">
+                                <div class="col-md-6">Email</div>
+                                <div class="col-md-6"><?php echo $rows["email"]?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Address</div>
+                                <div class="col-md-6"><?php echo $rows["addr"]?></div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-md-6">About you</div>
+                                <div class="col-md-6"><?php echo $rows["about"]?></div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>   
+            </body>
+            </html>
+
+
+
+        <?php
         }
         else
         {
-            echo '{"notice":"User doesnot exist. Please register and then proceed."}';
-        }   
+            require 'index.html';
+            echo "email address or password is invalid.";
+        }
     }
-    catch(PDOException $e){
-        echo '{"error: '.$e->getMessage().'}';
+    else
+    {
+        require 'index.html';
+        echo "Invalid username or password";
     }
-});
+?>
+

@@ -84,7 +84,55 @@ $app->post('/login', function(Request $request, Response $respose){
             $pass = $result['password1'];
             if (password_verify($loginpassword,$pass))
             {
-                echo "Login working.";
+                $_SESSION['user'] = $loginemail;?>
+
+<html>
+            <head>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> 
+            </head>
+            <body>
+                <div class="card-header">
+                    Welcome, <?php echo $loginemail ?>!
+                    <a href='logout.php'>Logout</php></a>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">Name</div>
+                                <div class="col-md-6"><?php echo $result["firstname"]. " " . $result["lastname"]?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Gender</div>
+                                <div class="col-md-6"><?php echo $result["gender"]?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Birth date</div>
+                                <div class="col-md-6"><?php echo $result["birthdate"]?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Mobile Number</div>
+                                <div class="col-md-6"><?php echo $result["phone"]?></div>
+                            </div>     
+                            <div class="row">
+                                <div class="col-md-6">Email</div>
+                                <div class="col-md-6"><?php echo $result["email"]?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Address</div>
+                                <div class="col-md-6"><?php echo $result["addr"]?></div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-md-6">About you</div>
+                                <div class="col-md-6"><?php echo $result["about"]?></div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>   
+            </body>
+            </html>
+
+                <?php
             }
             else
             {

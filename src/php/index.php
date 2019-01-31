@@ -16,4 +16,6 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 //User routes
 require '../routes/user.php';
 
+//Login routes
+//require '../routes/login.php';
 $app->run();
