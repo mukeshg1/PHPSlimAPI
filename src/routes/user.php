@@ -2,7 +2,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
+$app = new \Slim\App;
 
 //Get All Users
 $app->get('/user', function(Request $request, Response $respose){
@@ -43,7 +43,8 @@ $app->post('/user/add', function(Request $request, Response $response){
         // Connect
         $db = $db->connect();
         $stmt = $db->prepare($sql);
-        
+        $password1 = password_hash($password1, PASSWORD_BCRYPT);
+        $password2 = password_hash($password2, PASSWORD_BCRYPT);
         $arr = array(':firstname'=> $firstname,':middlename' => $middlename,':lastname' =>  $lastname,':gender' => $gender,':birthdate' => $birthdate,':phone' => $phone,':email' => $email,
                      ':addr' => $addr,':password1' => $password1,':password2' => $password2,':about' => $about);
         $stmt->execute($arr);

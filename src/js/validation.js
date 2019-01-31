@@ -105,6 +105,7 @@ var validation = (function() {
     $("#submit_btn").click(function() {
         
         
+        
         if (form.valid() === true)
         {
             $.ajax({
@@ -123,9 +124,6 @@ var validation = (function() {
                     password2   : $("#password2").val(),
                     about       : $("#about").val()
                 },
-                start: function(){
-                    $("#loader").show();
-                },
                 success: function (msg){
                     $("#message").html(msg);
                 },
@@ -134,10 +132,11 @@ var validation = (function() {
                 },
                 complete:function(){
                     $('body, html').animate({scrollTop:$('form').offset().top}, 'slow');
+                    $(form)[0].reset();
                     
                  }
             });
-            $(form)[0].reset();
+            
             
             
             return false;
