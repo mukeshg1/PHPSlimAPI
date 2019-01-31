@@ -17,9 +17,14 @@ $app->post('/login', function(Request $request, Response $respose){
     {
         $loginpassword = $_POST['loginpassword'];
     }
+    if (empty($loginpassword))
+    {
+        exit ("PAssword not set.");
+    }
     $sql = "select * from user where email = :loginemail ";
 
-    try{
+    try
+    {
         $db = new db(); 
         $db = $db->connect();
         $stmt = $db->prepare($sql);
@@ -32,24 +37,19 @@ $app->post('/login', function(Request $request, Response $respose){
         if ($result)
         {
             $pass = $result['password1'];
-            if (password_verify($loginpassword,$pass))
+            if ($loginpassword === $pass)
             {
                 echo "<br>Login working.";
             }
             else
             {
-                
                 echo '{"notice": "Invalid Email or Password"}';
-            }
-            
+            }          
         }
         else
         {
             echo '{"notice":"User doesnot exist. Please register and then proceed."}';
-        }
-        
-        
-        
+        }   
     }
     catch(PDOException $e){
         echo '{"error: '.$e->getMessage().'}';

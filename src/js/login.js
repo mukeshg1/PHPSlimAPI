@@ -57,6 +57,7 @@ var login = (function(){
                     $("#response").html(res);
                 }
             });
+            $(loginform)[0].reset();
             return false;
         }
     });
