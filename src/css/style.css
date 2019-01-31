@@ -1,0 +1,41 @@
+.err{
+    color: red;
+    font-style: italic;
+}
+p{
+    text-align: left;
+}
+.registerform{
+    float: right; 
+    width: auto;  
+    background-color:rgba(39, 13, 63, 0.931);
+    padding: 20px;
+    color: white;  
+}
+.body{
+    background-image: url("../images/graphic1.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+p{
+    color:white;
+    font-style: italic;
+    margin-left: 25px;
+}
+.head2{
+    color: white;
+    margin-left: 25px;
+    margin-top: 60px;
+}
+.logo{
+    height: 60px;
+    color: white;
+    
+}
+.loader{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -50px 0px 0px -50px;
+}
